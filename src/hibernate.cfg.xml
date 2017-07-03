@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<!-- 可选配置 -->
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<!-- 映射配置文件 -->
+		<mapping resource="cn\itcast\user\domain\User.hbm.xml"/>
+		<mapping resource="cn\itcast\customer\domain\Customer.hbm.xml"/>
+		<mapping resource="cn\itcast\dict\domain\Dict.hbm.xml"/>
+		<mapping resource="cn\itcast\linkman\domain\LinkMan.hbm.xml"/>
+		<mapping resource="cn\itcast\salevisit\domain\SaleVisit.hbm.xml"/>
+		
+	</session-factory>
+</hibernate-configuration>	

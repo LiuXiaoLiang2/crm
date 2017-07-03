@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	
+	<class name="cn.itcast.customer.domain.Customer" table="cst_customer">
+		<id name="cust_id" column="cust_id">
+			<generator class="native"/>
+		</id>
+		
+		<property name="cust_name" column="cust_name"/>
+		<property name="cust_user_id" column="cust_user_id"/>
+		<property name="cust_create_id" column="cust_create_id"/>
+		
+		
+		<!-- <property name="cust_source" column="cust_source"/>
+		<property name="cust_industry" column="cust_industry"/>
+		<property name="cust_level" column="cust_level"/> -->
+		
+		<!-- 现在customer表和dict表是多对一的关系.所以需要配置 -->
+		<!-- 因为我们现在的需求是根据客户查询所属的行业等等信息，没有根据行业查询之下的客户 -->
+		<!-- 所以只需要配置customer一方就可以,不需要配置dict一方 -->
+		
+		<many-to-one name="source" class="cn.itcast.dict.domain.Dict" column="cust_source" lazy="false"></many-to-one>
+		<many-to-one name="industry" class="cn.itcast.dict.domain.Dict" column="cust_industry" lazy="false"></many-to-one>
+		<many-to-one name="level" class="cn.itcast.dict.domain.Dict" column="cust_level" lazy="false"></many-to-one>
+		
+		<property name="cust_linkman" column="cust_linkman"/>
+		<property name="cust_phone" column="cust_phone"/>
+		<property name="cust_mobile" column="cust_mobile"/>
+		
+		
+		<property name="file_name" column="file_name"/>
+		<property name="file_path" column="file_path"/>
+		
+		<!-- 配置Customer与LinkMan之间的一对多关系 -->
+		<!-- 配置主表放弃维护,因为维修的时候,set集合的内容是空,如果不放弃维护的话,外键字段会被设置为null -->
+		<!-- 配置级联保存和级联删除 -->
+		<set name="linkMans" cascade="all" inverse="true" lazy="false">
+			<key column="lkm_cust_id"/>
+			<one-to-many class="cn.itcast.linkman.domain.LinkMan"/>
+		</set>
+		
+		
+		<set name="saleVisits" cascade="all" inverse="true" lazy="false">
+			<key column="visit_cust_id"/>
+			<one-to-many class="cn.itcast.salevisit.domain.SaleVisit"/>
+		</set>
+	</class>
+</hibernate-mapping>    

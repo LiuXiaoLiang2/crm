@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	
+	<!-- 配置包结构 -->
+    <package name="crm" namespace="/" extends="struts-default">
+    	<!-- 配置拦截器 -->
+    	<interceptors>
+    		<!-- 首先配置自定义拦截器 -->
+    		<interceptor name="privilegeInterceptor" class="cn.itcast.interceptor.PrivilegeInterceptor"></interceptor>
+    		<!-- 配置用户自定义的拦截器栈 -->
+    		<interceptor-stack name="privilegeStack">
+    			<!-- 首先经过的是自定义的拦截器 -->
+    			<interceptor-ref name="privilegeInterceptor">
+    				<param name="excludeMethods">login,regist</param>
+    			</interceptor-ref>
+    			<!-- 然后是Struts2的默认拦截器栈 -->
+    			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack>
+    	</interceptors>
+    	<!-- 配置全局视图 -->
+    	<global-results>
+    		<result name="login">/login.jsp</result>
+    		<result name="input">/error.jsp</result>
+    	</global-results>
+    
+    	<!-- 配置用户模块 -->
+    	<action name="user_*" class="userAction" method="{1}">
+    		<!-- 配置拦截器栈 -->
+    		<interceptor-ref name="privilegeStack"/>
+    		<result name="index" type="redirect">/index.jsp</result>
+    	</action>
+    	
+    	<!-- 配置客户模块 -->
+    	<action name="customer_*" class="customerAction" method="{1}">
+    		<interceptor-ref name="privilegeStack"/>
+    		<result name="list">/jsp/customer/list.jsp</result>
+    		<result name="toAdd">/jsp/customer/add.jsp</result>
+    		<result name="toEdit">/jsp/customer/edit.jsp</result>
+    		<result name="toListAction" type="redirectAction">
+    			<param name="actionName">customer_findByPage</param>
+             	<param name="namespace">/</param>
+    		</result>
+    	</action>
+    	
+    	<!-- 配置数据字典模块 -->
+    	<action name="dict_*" class="dictAction" method="{1}">
+    		<interceptor-ref name="privilegeStack"/>
+    	</action>
+    	
+    	<!-- 配置联系人模块 -->
+    	<action name="linkMan_*" class="linkManAction" method="{1}">
+    		<interceptor-ref name="privilegeStack"/>
+    		<result name="toAdd">/jsp/linkman/add.jsp</result>
+    		<result>/jsp/success.jsp</result>
+    		<result name="list">/jsp/linkman/list.jsp</result>
+    		<result name="toEdit">/jsp/linkman/edit.jsp</result>
+    		<result name="toListAction" type="redirectAction">customer_findByPage</result>
+    	</action>
+    	
+    	<!-- 配置客户拜访模块 -->
+    	<action name="saleVisit_*" class="saleVisitAction" method="{1}">
+    		<interceptor-ref name="privilegeStack"/>
+    		<result name="list">/jsp/visit/list.jsp</result>
+    		<result name="initSave">/jsp/visit/add.jsp</result>
+    		<result name="toListAction" type="redirectAction">saleVisit_findByPage.action</result>
+    	</action>
+    </package>
+</struts>
